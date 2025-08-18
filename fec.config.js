@@ -23,11 +23,18 @@ module.exports = {
     '/chat': {
       target: 'http://localhost:8000',
     },
+    '/context': {
+      target: 'http://localhost:8000',
+    },
   },
   moduleFederation: {
     exposes: {
       './Header': './src/GenUI/RemoteModules/Header',
       './RootApp': './src/AppEntry',
+      './ClusterVulnerabilityOverview':
+        './src/GenUI/RemoteModules/ClusterOverview',
+      './ClusterRecommendations':
+        './src/GenUI/RemoteModules/ClusterRecommendations',
     },
     exclude: ['react-router-dom'],
     shared: [
