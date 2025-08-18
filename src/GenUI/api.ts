@@ -4,7 +4,7 @@ import { ScalprumComponentProps } from '@scalprum/react-core';
 
 export type RegistryProps<P = {}> = ScalprumComponentProps<
   {},
-  { props: P; contextId: string }
+  { props: P; contextId: string; componentId: string }
 >;
 
 export type StreamChunk =

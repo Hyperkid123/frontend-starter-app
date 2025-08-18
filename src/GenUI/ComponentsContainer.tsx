@@ -6,6 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { ScalprumComponent } from '@scalprum/react-core';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import './ComponentsContainer.scss';
 import {
@@ -24,12 +25,18 @@ import { RegistryProps } from './api';
 
 const LoadingOverlay = () => {
   return (
-    <div className="loading-overlay">
+    <motion.div
+      className="loading-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
+    >
       <Bullseye>
         <Icon size="3xl" />
         <Spinner />
       </Bullseye>
-    </div>
+    </motion.div>
   );
 };
 
@@ -87,14 +94,22 @@ const ComponentsContainer = ({
   }, [layoutRef]);
   return (
     <div className="components-container" style={styles}>
-      {isInProgress && <LoadingOverlay />}
+      <AnimatePresence>{isInProgress && <LoadingOverlay />}</AnimatePresence>
       <Stack hasGutter>
         {components?.length
           ? components.map((component, index) => (
-              <StackItem
-                key={`${component.scope}-${component.module}-${index}`}
-              >
-                <ScalprumComponent {...component.props} {...component} />
+              <StackItem key={component.componentId}>
+                <motion.div
+                  initial={{ y: -50, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: index * 0.1,
+                    ease: 'easeOut',
+                  }}
+                >
+                  <ScalprumComponent {...component.props} {...component} />
+                </motion.div>
               </StackItem>
             ))
           : null}

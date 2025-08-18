@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ClusterData } from './common';
+import { AnimatedTableContainer, createAnimatedCell } from '../AnimationUtils';
 import {
   Content,
   Divider,
@@ -95,7 +96,13 @@ const Recommendation = ({ clusterRule }: { clusterRule: ClusterRule }) => {
   );
 };
 
-const ClusterRecommendations = ({ clusterId }: { clusterId: string }) => {
+const ClusterRecommendations = ({
+  clusterId,
+  componentId,
+}: {
+  clusterId: string;
+  componentId: string;
+}) => {
   const [data, setData] = useState<ClusterRecommendationResponse | undefined>(
     undefined,
   );
@@ -108,10 +115,16 @@ const ClusterRecommendations = ({ clusterId }: { clusterId: string }) => {
   }, [clusterId]);
 
   const columns: DataViewTh[] = [
-    'Description',
-    'Modified',
-    'First impacted',
-    'Total risk',
+    {
+      cell: 'Description',
+      props: { key: `${componentId}-header-description` },
+    },
+    { cell: 'Modified', props: { key: `${componentId}-header-modified` } },
+    {
+      cell: 'First impacted',
+      props: { key: `${componentId}-header-impacted` },
+    },
+    { cell: 'Total risk', props: { key: `${componentId}-header-risk` } },
   ];
 
   const rows = useMemo<DataViewTrTree[]>(() => {
@@ -119,12 +132,27 @@ const ClusterRecommendations = ({ clusterId }: { clusterId: string }) => {
       return [];
     }
 
-    return data.report.data.map((item) => ({
+    return data.report.data.map((item, index) => ({
       row: [
-        item.description,
-        item.created_at,
-        item.impacted,
-        { cell: <>{riskLabelMapper[item.total_risk]}</> },
+        createAnimatedCell(
+          item.description,
+          index,
+          0,
+          `${item.rule_id}-description`,
+        ),
+        createAnimatedCell(
+          item.created_at,
+          index,
+          1,
+          `${item.rule_id}-created`,
+        ),
+        createAnimatedCell(item.impacted, index, 2, `${item.rule_id}-impacted`),
+        createAnimatedCell(
+          riskLabelMapper[item.total_risk],
+          index,
+          3,
+          `${item.rule_id}-risk`,
+        ),
       ],
       id: item.rule_id,
       children: [
@@ -132,7 +160,12 @@ const ClusterRecommendations = ({ clusterId }: { clusterId: string }) => {
           id: item.rule_id + 'child',
           row: [
             {
-              cell: <Recommendation clusterRule={item} />,
+              ...createAnimatedCell(
+                <Recommendation clusterRule={item} />,
+                index,
+                4,
+                `${item.rule_id}-recommendation`,
+              ),
               colSpan: 4,
             },
           ],
@@ -145,7 +178,9 @@ const ClusterRecommendations = ({ clusterId }: { clusterId: string }) => {
     <>
       <Stack>
         <StackItem>
-          <DataViewTable isTreeTable columns={columns} rows={rows} />
+          <AnimatedTableContainer componentId={componentId}>
+            <DataViewTable isTreeTable columns={columns} rows={rows} />
+          </AnimatedTableContainer>
         </StackItem>
       </Stack>
     </>

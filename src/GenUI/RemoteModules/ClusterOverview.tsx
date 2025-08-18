@@ -4,6 +4,7 @@ import {
   DataViewTh,
   DataViewTr,
 } from '@patternfly/react-data-view/dist/dynamic/DataViewTable';
+import { AnimatedTableContainer, createAnimatedCell } from '../AnimationUtils';
 import { useActiveConversation } from '@redhat-cloud-services/ai-react-state';
 import { updateContext } from '../api';
 import { ClusterData, ClusterHitsRisk } from './common';
@@ -53,9 +54,11 @@ async function getClusters(issueLevels: IssueLevels[]) {
 const ClusterOverview = ({
   issueLevels,
   contextId,
+  componentId,
 }: {
   issueLevels: IssueLevels[];
   contextId: string;
+  componentId: string;
 }) => {
   const activeConversation = useActiveConversation();
   const [clusters, setClusters] = useState<ClusterData[]>([]);
@@ -79,15 +82,44 @@ const ClusterOverview = ({
     handleInit();
   }, [issueLevels]);
 
-  const columns: DataViewTh[] = ['Name', 'Version', 'Critical', 'Important'];
-  const rows: DataViewTr[] = clusters.map((cluster) => [
-    cluster.cluster_name,
-    cluster.cluster_version,
-    cluster.hits_by_total_risk[4],
-    cluster.hits_by_total_risk[3],
+  const columns: DataViewTh[] = [
+    { cell: 'Name', props: { key: `${componentId}-header-name` } },
+    { cell: 'Version', props: { key: `${componentId}-header-version` } },
+    { cell: 'Critical', props: { key: `${componentId}-header-critical` } },
+    { cell: 'Important', props: { key: `${componentId}-header-important` } },
+  ];
+  const rows: DataViewTr[] = clusters.map((cluster, index) => [
+    createAnimatedCell(
+      cluster.cluster_name,
+      index,
+      0,
+      `${cluster.cluster_name}-name`,
+    ),
+    createAnimatedCell(
+      cluster.cluster_version,
+      index,
+      1,
+      `${cluster.cluster_name}-version`,
+    ),
+    createAnimatedCell(
+      cluster.hits_by_total_risk[4],
+      index,
+      2,
+      `${cluster.cluster_name}-critical`,
+    ),
+    createAnimatedCell(
+      cluster.hits_by_total_risk[3],
+      index,
+      3,
+      `${cluster.cluster_name}-important`,
+    ),
   ]);
 
-  return <DataViewTable columns={columns} rows={rows} />;
+  return (
+    <AnimatedTableContainer componentId={componentId}>
+      <DataViewTable columns={columns} rows={rows} />
+    </AnimatedTableContainer>
+  );
 };
 
 export default ClusterOverview;
