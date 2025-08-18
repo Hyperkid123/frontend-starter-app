@@ -33,7 +33,7 @@ objects:
           position: 200
           navItems:
             - id: frontend-starter-app-two
-              title: Starter app link two
+              title: LLM Based UI component
               href: /staging/foo/starter
         - segmentId: starter-app
           bundleId: staging

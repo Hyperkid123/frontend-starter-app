@@ -19,7 +19,16 @@ module.exports = {
    */
   plugins: [],
   _unstableHotReload: process.env.HOT === 'true',
+  routes: {
+    '/chat': {
+      target: 'http://localhost:8000',
+    },
+  },
   moduleFederation: {
+    exposes: {
+      './Header': './src/GenUI/RemoteModules/Header',
+      './RootApp': './src/AppEntry',
+    },
     exclude: ['react-router-dom'],
     shared: [
       {
