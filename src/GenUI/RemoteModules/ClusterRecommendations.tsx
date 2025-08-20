@@ -16,6 +16,7 @@ import {
 } from '@patternfly/react-data-view';
 import {
   AngleDoubleDownIcon,
+  AngleDoubleUpIcon,
   BullseyeIcon,
   EqualsIcon,
   ExclamationIcon,
@@ -35,7 +36,7 @@ const riskLabelMapper = {
     </Label>
   ),
   3: (
-    <Label isCompact color="orange" icon={<AngleDoubleDownIcon />}>
+    <Label isCompact color="orange" icon={<AngleDoubleUpIcon />}>
       Important
     </Label>
   ),

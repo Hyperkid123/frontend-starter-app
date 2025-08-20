@@ -22,6 +22,7 @@ import {
 } from '@redhat-cloud-services/ai-react-state';
 import { AdditionalAttributes } from './ChatStateManager';
 import { RegistryProps } from './api';
+import { Message } from '@redhat-cloud-services/ai-client-state';
 
 const LoadingOverlay = () => {
   return (
@@ -45,8 +46,50 @@ const ComponentsContainer = ({
 }: {
   layoutRef: React.RefObject<HTMLDivElement>;
 }) => {
-  const messages = useMessages<AdditionalAttributes>();
+  // const messages = useMessages<AdditionalAttributes>();
   const isInProgress = useInProgress();
+  const messages: Message<AdditionalAttributes>[] = [
+    {
+      answer: 'Baz',
+      date: new Date(),
+      id: '2',
+      role: 'bot',
+      additionalAttributes: {
+        contextId: '2',
+        components: [
+          {
+            scope: 'frontendStarterApp',
+            module: './ClusterVulnerabilityOverview',
+            componentId: '2',
+            contextId: '2',
+            props: {
+              issueLevels: ['high', 'critical'],
+            },
+          },
+        ],
+      },
+    },
+    {
+      answer: 'Foobar',
+      date: new Date(),
+      id: '1',
+      role: 'bot',
+      additionalAttributes: {
+        contextId: '1',
+        components: [
+          {
+            scope: 'frontendStarterApp',
+            module: './ClusterRecommendations',
+            componentId: '1',
+            contextId: '1',
+            props: {
+              clusterId: 'f0cc23f7-5dfa-440a-88f1-5a43e75b74d1',
+            },
+          },
+        ],
+      },
+    },
+  ];
   const components = useMemo<RegistryProps[]>(() => {
     const result = messages
       .filter(

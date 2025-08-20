@@ -1,3 +1,29 @@
 .layout-grid {
   height: 100%;
+  display: grid;
+  grid-template-rows: 75% 25%;
+  grid-template-areas: 
+    "components"
+    "chat";
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.components {
+  grid-area: components;
+  overflow: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.chat {
+  grid-area: chat;
+  overflow: hidden;
+  background: transparent;
+  border-radius: 12px;
 }
