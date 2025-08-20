@@ -1,13 +1,16 @@
 .layout-grid {
   height: 100%;
+  width: 100%;
   display: grid;
-  grid-template-rows: 75% 25%;
+  grid-template-columns: 1fr;
   grid-template-areas: 
     "components"
     "chat";
-  gap: 12px;
-  padding: 16px;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  transition: grid-template-rows 0.3s ease-in-out, gap 0.3s ease-in-out;
+  position: relative;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .components {
@@ -19,11 +22,58 @@
   box-shadow: 
     0 1px 3px rgba(0, 0, 0, 0.1),
     0 1px 2px rgba(0, 0, 0, 0.06);
+  height: 100%;
+  min-height: 0; // Allow grid to control the height
 }
 
 .chat {
   grid-area: chat;
   overflow: hidden;
-  background: transparent;
+  background: #ffffff;
   border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.layout-resize-button {
+  position: absolute;
+  bottom: 216px; // Position to overlap with chat area border
+  right: 36px; // Account for 16px padding + 20px margin
+  width: 32px;
+  height: 32px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0; // Match chat area border color
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(50%); // Position half in gap, half on chat border
+
+  &:hover {
+    background: #f9fafb;
+    border-color: #3b82f6;
+    color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(50%) translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(50%) translateY(0);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  // Adjust position for expanded state
+  .layout-grid.expanded & {
+    bottom: 516px; // Position to overlap with expanded chat area border
+  }
 }

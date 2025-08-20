@@ -1,12 +1,41 @@
-.chat-messages {
+.chat-container {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 
-    0 1px 3px rgba(0, 0, 0, 0.1),
-    0 1px 2px rgba(0, 0, 0, 0.06);
+  background: transparent;
+  padding: 16px;
+  box-sizing: border-box;
+  position: relative;
+
+  // Empty state: center the input - optimized for 87px height
+  &.empty-state {
+    justify-content: center;
+    align-items: center;
+    min-height: 0;
+    padding: 8px 16px; // Reduced padding for 87px total height
+    
+    .message-bar-container {
+      border-top: none;
+      max-width: 600px;
+      width: 100%;
+      padding: 0;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .resize-button {
+      top: -4px; // Adjust position for smaller height
+    }
+  }
+
+  // Has messages: normal layout
+  &.has-messages {
+    justify-content: flex-start;
+    
+    .message-bar-container {
+      margin-top: auto;
+    }
+  }
   
   .messages-messages-container {
     flex: 1;
@@ -14,11 +43,10 @@
     align-items: center;
     overflow: hidden;
     padding: 16px;
-    margin: 12px;
-    margin-bottom: 0;
-    background: #f8fafc;
+    margin-bottom: 12px;
+    background: transparent;
     border-radius: 8px;
-    border: 1px solid #e2e8f0;
+    border: none;
   }
 
   .message-navigation-container {
@@ -39,22 +67,30 @@
     align-items: center;
     justify-content: center;
     background: #ffffff;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    border-radius: 50%;
     color: #6b7280;
     transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     
     &:hover:not(:disabled) {
       background: #f9fafb;
       border-color: #3b82f6;
       color: #3b82f6;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-1px);
+    }
+    
+    &:active:not(:disabled) {
+      transform: translateY(0);
     }
     
     &:disabled {
       opacity: 0.4;
       cursor: not-allowed;
+      background: #f9fafb;
+      border-color: #e5e7eb;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
   }
 
@@ -78,7 +114,7 @@
     min-width: 100%;
     height: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
     flex-shrink: 0;
     padding: 16px;
@@ -128,20 +164,73 @@
     font-size: 14px;
     line-height: 1.5;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    flex: 1;
+    flex: 0 0 auto;
     overflow: hidden;
-    text-overflow: ellipsis;
+    word-wrap: break-word;
+    word-break: break-word;
+  }
+
+  // Normal state: show ellipsis after 1 line
+  &:not(.expanded) .response-text {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+  }
+
+  // Expanded state: show full text, align to top
+  &.expanded .response-text {
+    display: block;
+    max-height: none;
   }
 
   .message-bar-container {
     width: 100%;
     flex-shrink: 0;
-    padding: 16px;
-    background: #ffffff;
+    background: transparent;
     border-top: 1px solid #f3f4f6;
+  }
+
+  .resize-button {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 16px;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 1000; // High z-index to stay on top
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      background: #f9fafb;
+      border-color: #3b82f6;
+      color: #3b82f6;
+      box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+      transform: translateX(-50%) translateY(1px);
+    }
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  // Ensure button is visible in all states
+  &.empty-state .resize-button,
+  &.has-messages .resize-button,
+  &.expanded .resize-button {
+    display: flex;
   }
 }
 
