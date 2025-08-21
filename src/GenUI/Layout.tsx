@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import classNames from 'classnames';
-import { ChevronUpIcon, ChevronDownIcon } from '@patternfly/react-icons';
+import { ChevronDownIcon, ChevronUpIcon } from '@patternfly/react-icons';
 
 import { Grid, GridItem, Stack, StackItem } from '@patternfly/react-core';
 import ComponentsContainer from './ComponentsContainer';
@@ -102,7 +102,7 @@ const Layout: React.FC = () => {
           hasMessages={hasMessages}
         />
       </div>
-      
+
       {/* Resize button positioned at layout level */}
       {hasMessages && (
         <button
@@ -110,11 +110,7 @@ const Layout: React.FC = () => {
           onClick={() => setIsExpanded(!isExpanded)}
           aria-label={isExpanded ? 'Collapse chat' : 'Expand chat'}
         >
-          {isExpanded ? (
-            <ChevronDownIcon />
-          ) : (
-            <ChevronUpIcon />
-          )}
+          {isExpanded ? <ChevronDownIcon /> : <ChevronUpIcon />}
         </button>
       )}
     </div>

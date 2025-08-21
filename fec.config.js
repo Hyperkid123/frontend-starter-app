@@ -35,6 +35,7 @@ module.exports = {
         './src/GenUI/RemoteModules/ClusterOverview',
       './ClusterRecommendations':
         './src/GenUI/RemoteModules/ClusterRecommendations',
+      './ClusterUpdateRisk': './src/GenUI/RemoteModules/ClusterUpdateRisk',
     },
     exclude: ['react-router-dom'],
     shared: [

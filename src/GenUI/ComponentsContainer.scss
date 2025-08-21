@@ -1,5 +1,11 @@
 .components-container {
   position: relative;
+  background: #f8f9fa;
+  
+  // Add subtle texture/pattern to indicate it's a canvas
+  background-image: 
+    radial-gradient(circle at 20px 20px, #e9ecef 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
 .loading-overlay {
@@ -13,4 +19,209 @@
   align-items: center;
   justify-content: center;
   z-index: 1;
+}
+
+.layout-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 20px;
+  background: #ffffff;
+}
+
+.layout-carousel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 300px;
+
+  .nav-button {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 50%;
+    color: #6b7280;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    &:hover:not(:disabled) {
+      background: #f9fafb;
+      border-color: #3b82f6;
+      color: #3b82f6;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-1px);
+    }
+    
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      background: #f9fafb;
+      border-color: #e5e7eb;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    // Special styling for plus icon (new layout button)
+    &.nav-button-right[data-is-plus="true"] {
+      background: #f8fafc;
+      border-color: #d1d5db;
+      color: #6b7280;
+      
+      &:hover {
+        background: #3b82f6;
+        border-color: #3b82f6;
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+    }
+  }
+}
+
+.layout-display {
+  text-align: center;
+  flex: 1;
+  min-width: 0;
+
+  .layout-counter {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    white-space: nowrap;
+
+    .active-indicator {
+      color: #3b82f6;
+      font-weight: 500;
+      font-size: 14px;
+    }
+  }
+}
+
+// React Grid Layout overrides
+.react-grid-layout {
+  position: relative;
+  padding: 20px;
+  margin: 0;
+  background: transparent;
+  min-height: 200px;
+}
+
+.react-grid-item {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.07),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.2s ease;
+  position: relative;
+  
+  &:hover {
+    box-shadow: 
+      0 4px 6px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+    
+    .drag-handle {
+      opacity: 1;
+    }
+  }
+  
+  &.react-grid-item--resizing,
+  &.react-grid-item--moving {
+    opacity: 1;
+    z-index: 1000;
+    background: #3b82f6 !important;
+    border: 2px solid #1d4ed8 !important;
+    box-shadow: 
+      0 20px 25px rgba(59, 130, 246, 0.4),
+      0 10px 15px rgba(59, 130, 246, 0.3);
+    transform: translateY(-4px) scale(1.02);
+    
+    .drag-handle {
+      opacity: 1;
+      color: #ffffff;
+    }
+    
+    // Make content semi-transparent during drag
+    > div {
+      opacity: 0.3;
+    }
+  }
+}
+
+// Drag handle styling
+.drag-handle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  background: rgba(107, 114, 128, 0.1);
+  border: 1px solid rgba(107, 114, 128, 0.2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 10;
+  
+  &:hover {
+    background: rgba(107, 114, 128, 0.2);
+    border-color: rgba(107, 114, 128, 0.3);
+  }
+  
+  &:active {
+    cursor: grabbing;
+  }
+  
+  // Drag handle dots pattern
+  &::before {
+    content: '⋮⋮';
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+}
+
+.react-resizable-handle {
+  background-image: none;
+  background-color: #3b82f6;
+  opacity: 0.3;
+  border-radius: 2px;
+  
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+.react-resizable-handle::after {
+  border-right: 3px solid #ffffff;
+  border-bottom: 3px solid #ffffff;
+}
+
+// Empty state styling - keep white background
+.components-container.empty-state {
+  background: #ffffff;
+  background-image: none;
 }

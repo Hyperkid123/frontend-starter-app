@@ -15,4 +15,5 @@ export type ClusterData = {
   cluster_version: string;
   hits_by_total_risk: ClusterHitsRisk;
   total_hit_count: number;
+  upgrade_recommended?: boolean;
 };
